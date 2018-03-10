@@ -1,4 +1,4 @@
-import { promiseDef, simplePromise } from './promises';
+import { promiseDef, simplePromise, chamarApiRestPromisse } from './promises';
 
 test('promises def', () => {
 
@@ -21,14 +21,21 @@ test('promises def', () => {
  * Fazer junto
  */
 test('simple promise chaining', (done) => {
-    done();
+    simplePromise('Valor')
+    .then(v => console.log('Meu valor ', v))
+    .then(() => done());
 });
 
 /**
  * Fazer junto
  */
 test('simple promise error catching chaining', (done) => {
-    done();
+    simplePromise()
+    .then(v => console.log('Meu valor ', v))
+    .catch(error => {
+        console.log('Erro: ', error);
+    })
+    .then(() => done());
 });
 
 /**
@@ -37,7 +44,21 @@ test('simple promise error catching chaining', (done) => {
  * Refatorar o exercício dos callbacks (#2) para utilizar Promises conforme exemplo mostrado anteriormente
  */
 test('refactoring callback exercise', () => {
+    const funcaoSucesso = resultado => {
+        return resultado;
+    };
 
+    const funcaoFalha = erro => {
+        return erro;
+    };
+
+    chamarApiRestPromisse('/api/treinamento/pessoa2', funcaoSucesso, funcaoFalha)
+        .catch( erro => console.log('1) erro => ', erro))
+        .then( () => done());
+
+    chamarApiRestPromisse('/api/treinamento/pessoa', funcaoSucesso, funcaoFalha)
+        .then( resultado => console.log('1) resultado => ', resultado))
+        .then( () => done());
 });
 
 /**
@@ -46,5 +67,25 @@ test('refactoring callback exercise', () => {
  * Refatorar o exercício do encadeamento dos callbacks para utilizar o encadeamento das promises.
  */
 test('refactoring callback chaining promises', () => {
+    const funcaoSucesso = resultado => {
+        return resultado;
+    };
 
+    const funcaoFalha = erro => {
+        return erro;
+    };
+
+    chamarApiRestPromisse('/api/treinamento/pessoa', funcaoSucesso, funcaoFalha)
+        .then( resultado => {
+            console.log('2) primeiro sucesso');
+            return resultado.nome;
+        })
+        .then( resultado => {
+            console.log('2) segundo sucesso => ', resultado) 
+            return resultado.toUpperCase();
+        })
+        .then( resultado => {
+            console.log('2) segundo sucesso => ', resultado) 
+        })
+        .then( () => done());
 });

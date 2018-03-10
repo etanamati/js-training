@@ -1,4 +1,4 @@
-import { simpleCallback, simplePromise } from './callbacks';
+import { simpleCallback, simplePromise, chamarApiRest } from './callbacks';
 
 test('simple callback', () => {
     const result = simpleCallback(value => `Callback with value: ${value} was called`);
@@ -43,7 +43,19 @@ test('callback hell', () => {
  *  - Você deve chamar a sua função dentro do bloco de testes abaixo 'http mock with callbacks'
  */
 test('http mock with callbacks', () => {
+    const funcaoSucesso = resultado => {
+        return resultado;
+    };
+
+    const funcaoFalha = erro => {
+        return erro;
+    };
+
+    let erro = chamarApiRest('/api/treinamento/pessoa2', funcaoSucesso, funcaoFalha);
+    let sucesso = chamarApiRest('/api/treinamento/pessoa', funcaoSucesso, funcaoFalha);
     
+    expect(erro).toEqual('erro');
+    expect(sucesso.nome).toEqual('joao');
 });
 
 /**
@@ -53,5 +65,17 @@ test('http mock with callbacks', () => {
  *
  */
 test('http mock with callbacks chaining', () => {
+    const funcaoSucesso = resultado => {
+        return resultado;
+    };
 
+    const funcaoFalha = erro => {
+        return chamarApiRest('/api/treinamento/pessoa',
+                  funcaoSucesso,
+                  funcaoFalha);
+    };
+
+    chamarApiRest('/api/treinamento/pessoa2',
+                  funcaoSucesso,
+                  funcaoFalha);
 });

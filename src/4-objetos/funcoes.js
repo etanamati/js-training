@@ -18,15 +18,15 @@ const equalsClosure = propertyName => {
     }
 };
 
-const equalsClosureDoClosure = propertyName => {
-    
-        return (object1, object2) => {
-            
-            return (obj1, obj2) => {
-                
-                return object1[propertyName] === object2[propertyName];
-            }
-        }
-    };
 
-module.exports = { equalsClosure, firstClassArrowFunction, oldStyleLiteralFunction, oldStyleExpressionFunction, equalsClosureDoClosure };
+const equalsClosureDoClosure = propertyName => {
+
+    return (object1, object2) => {
+
+        return (obj1, obj2) => {
+            return object1[propertyName] === object2[propertyName];
+        }
+    }
+};
+
+module.exports = { equalsClosure, equalsClosureDoClosure,  firstClassArrowFunction, oldStyleLiteralFunction, oldStyleExpressionFunction };

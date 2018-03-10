@@ -19,3 +19,12 @@ export const simpleCallback = (callback = () => 'Empty callback') => {
 
     return callback('My first callback');
 };
+
+
+export const chamarApiRest = (url, sucesso, erro) => {
+    if (url === '/api/treinamento/pessoa') {
+        return sucesso ({nome: "joao"});
+    } else {
+        return erro ('erro');
+    }
+}

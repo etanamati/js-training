@@ -1,4 +1,4 @@
-import { extractOnly, extractIdAndNameFromArguments, extractIdAndNameFromObject } from './destructuring';
+import { extractIdAndNameFromArguments, extractIdAndNameFromObject, extrairCampoDinamicos } from './destructuring';
 
 test(' destructuring from function args', () => {
 
@@ -26,72 +26,41 @@ test(' destructuring from object', () => {
     expect(result).toEqual('1Eduardo');
 });
 
-test('Destructuring deve receber o valor padrão', () => {
-
-    const result = extractIdAndNameFromObject({});
-    expect(result).toEqual('0semnome');
-});
-
-test('Destructuring do array', () => {
-
-    const arrayNumerico = [ 1, 2, 3 ];
-
-    const [a, , b] = arrayNumerico;
-
-    expect(a).toEqual(1);
-    expect(b).toEqual(3);
-
-});
-
-test('Destructuring do array com objeto', () => {
-
-    const arrayObjetos = [{id: 1, nome: 'Eduardo'}, {id: 2, nome: 'Fulano'}];
-
-    const [ eduardo, fulano ] = arrayObjetos;
-
-    expect(eduardo.id).toEqual(1);
-    expect(eduardo.nome).toEqual('Eduardo');
-
-    expect(fulano.id).toEqual(2);
-    expect(fulano.nome).toEqual('Fulano');
-});
-
-test('Destructuring dois níveis', () => {
-
-    const objeto = {
-        id: 1,
-        nome: 'Eduardo',
-        contato: {
-            telefone: {
-                celular: '44999493886',
-                residencial: '30235201'
-            },
-            email: 'eduardoj.gardin'
-        }
-    };
-
-    const { contato: { email, telefone: { celular } }} = objeto;
-
-    expect(email).toEqual('eduardoj.gardin');
-    expect(celular).toEqual('44999493886');    
-});
-
-test('Extract only fields', () => {
-
-    const objeto = {
-        id: 1,
-        nome: 'Eduardo',
-        cpf: '999999999',
-        contato: {
-            email: 'eduardoj.gardin@gmail.com'
-        }
-    };
-
-    const result = extractOnly(objeto, 'nome', 'cpf');
-
-    expect(result.nome).toEqual('Eduardo');
-    expect(result.cpf).toEqual('999999999');
+test('Destructuring dois niveis do débito', () => {
     
-    expect(result.id).toBeUndefined();
-    expect(result.contato).toBeUndefined();        
+    const cadastro = {
+        tipoCadastro: 1,
+        cadastroGeral: 2,
+        pessoa: {
+            id: 100,
+            nome: 'Teste'
+        }
+    }
+
+    const { cadastroGeral, pessoa: {nome} } = cadastro;
+    expect(cadastroGeral).toEqual(2);
+    expect(nome).toEqual('Teste');
+});
+
+test('Destructuring dois niveis do débito', () => {
+    const debito = {
+        idDebito: 1,
+        valorTotal: 1000,
+        parcelas: [
+            {parcela: 1,
+             situacao: 'A',
+             valor: 1000},
+            {parcela: 2,
+             situacao: 'A',
+             valor: 1000},
+             {parcela: 3,
+              situacao: 'A',
+              valor: 1000}
+        ]
+    }
+    
+    const resultado = extrairCampoDinamicos(debito, ['idDebito', 'valorTotal']);
+    expect(resultado.idDebito).toEqual(1);
+    expect(resultado.valorTotal).toEqual(1000);
+    
 });

@@ -27,3 +27,12 @@ export const simplePromise = (value) => new Promise((resolve, reject) => {
         reject('Invalid value');
     }
 });
+
+export const chamarApiRestPromisse = (url, sucesso, erro) => new Promise((resolve, reject) => {
+
+    if(url === '/api/treinamento/pessoa') {
+        resolve(sucesso({nome: "joao"}));
+    } else {
+        reject(erro('erro'));
+    }
+});
